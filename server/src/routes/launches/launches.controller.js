@@ -4,9 +4,15 @@ function getAllLaunches(req, res) {
   return res.status(200).json(Array.from(launches.values()));
 }
 
-function httpAddNewLaunch(res, req) {
+function httpAddNewLaunch(req, res) {
   const launch = req.body;
-  if(!launch.mission || !launch.rocket || !launch.launchDate || !launch.destination){
+  if (!launch) {
+    return res.status(400).json({
+      success: false,
+      error: 'launch is not defined',
+    });
+  }
+  if(!launch.mission || !launch.rocket || !launch.launchDate || !launch.target){
     return res.status(400).json({
         success: false,
         error: 'missing required launch property',
