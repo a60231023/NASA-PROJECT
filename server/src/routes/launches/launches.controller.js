@@ -1,6 +1,7 @@
 const { launches, addNewLaunch } = require("../../models/launches.model");
 function getAllLaunches(req, res) {
   console.log("hi");
+  console.log(launches);
   return res.status(200).json(Array.from(launches.values()));
 }
 
@@ -28,8 +29,28 @@ function httpAddNewLaunch(req, res) {
   addNewLaunch(launch);
   return res.status(201).json(launch);
 }
+function httpAbortLaunch(req, res){
+  const launchId = Number(req.params.id);
+  console.log(launchId);
+  console.log(launches);
+  //comes back as string params.id
+  if(!(launches.has(launchId))){
+    console.log('i am insind launches not found');
+    console.log(launches);
+    return res.status(400).json({
+      error: 'Launch not found',
+    });
+  }
+  //launch.delete(launchId)
+  const aborted = launches.get(launchId);
+  aborted.upcoming = false;
+  aborted.success = false;
+  return aborted;
+
+}
 
 module.exports = {
   getAllLaunches,
   httpAddNewLaunch,
+  httpAbortLaunch,
 };
